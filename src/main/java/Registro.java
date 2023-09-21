@@ -6,185 +6,137 @@ import java.util.Scanner;
 
 public class Registro {
     public static void main(String[] args) {
-        String [][] registro = new double[50][3];
-        int a = -1;
+        String [][] registro = new String[50][3];
+        menu(registro);
 
 
+    }
+    public static void menu(String[][] registro){
+        int decision =0;
+        while (decision<1 || decision>6){
+            printMenu();
+            decision=tomarDecision();
+        }
+        switcHMenu(decision,registro);
+    }
 
-
-        do {
-            System.out.println("""
+    private static void printMenu() {
+        System.out.println("""
                 Menú
                 1) Agregar persona.
                 2) Mostrar la cantidad de personas mayores de edad.
                 3) Mostrar la cantidad de personas menores de edad.
                 4) Mostrar la cantidad de personas de tercera edad.
                 5) Mostrar la cantidad de personas según estado civil (Soltero/a - Casado/a).
-                6)Salir.
+                6) Salir.
                 """);
+    }
 
+    private static void switcHMenu(int decision, String[][] registro) {
+        switch (decision){
+            case 1:
+                agregarPersona(registro);
+                break;
+            case 2:
+                mayoresEdad(registro);
+                break;
+            case 3:
+                menoresEdad(registro);
+                break;
+            case 4:
+                terceraEdad(registro);
+                break;
+            case 5:
+                estadoCivil(registro);
+                break;
+            case 6:
+                break;
+        }
+    }
+    public static void agregarPersona(String[][] registro){
+        if(hayCupo(registro)) {
 
+            String nombre=ingresarNombre();
+            String Estadocivil=ingresarEstadoCivil();
+            int edad=ingresarEdad();
 
+            int indiceDisponible = obtenerUltimoEspacio(registro);
+            registro[indiceDisponible][0] = nombre;
+            registro[indiceDisponible][1] = Estadocivil;
+            registro[indiceDisponible][2] = String.valueOf(edad);
+            System.out.println("Persona agregada.");
+        } else {
+            System.out.println("No hay cupo.");
+        }
+    }
 
-            do {
-                try {
-                    a = new Scanner(System.in).nextInt();
-                } catch (InputMismatchException e) {
-                    System.err.println("Opción inválida");
-                }
-            }while (a > 0 || a < 6);
-
-
-
-
-            if(a == 1) {
-                if(hayCupo(registro)) {
-                    int indiceDisponible = obtenerUltimoEspacio(registro);
-                    String nombre;
-                    String Estadocivil;
-                    int edad;
-
-
-
-
-                    while(true) {
-                        try {
-                            nombre = new Scanner(System.in).nextLine();
-                        } catch (InputMismatchException e) {
-                            System.err.println("Opción inválida");
-                            continue;
-                        }
-                        break;
-                    }
-
-
-
-
-                    while(true) {
-                        try {
-                            Estadocivil = new Scanner(System.in).nextLine();
-                        } catch (InputMismatchException e) {
-                            System.err.println("Opción inválida");
-                            continue;
-                        }
-                        break;
-                    }
-
-
-
-
-                    while(true) {
-                        try {
-                            edad = new Scanner(System.in).nextLine();
-                        } catch (InputMismatchException e) {
-                            System.err.println("Opción inválida");
-                            continue;
-                        }
-                        break;
-                    }
-
-
-
-
-                    registro[indiceDisponible][0] = nombre;
-                    registro[indiceDisponible][1] = Estadocivil;
-                    registro[indiceDisponible][2] = edad;
-                    System.out.println("Persona agregada.");
-                } else {
-                    System.out.println("No hay cupo.");
-                }
-            } else if(a == 2) {
-                int mayoresDeEdad = 0;
-
-
-
-
-                for (double [] persona : registro) {
-                    if (persona[2] >= 18) mayoresDeEdad++;
-                }
-
-
-
-
-                System.out.println("Hay " + mayoresDeEdad + " mayores de edad.");
-            } else if(a == 3) {
-                int menoresDeEdad = 0;
-                int queSera = obtenerUltimoEspacio(registro);
-
-
-
-
-                for (int i = 0; i < queSera; i++) {
-                    if (registro[i][2] < 18) menoresDeEdad++;
-                }
-
-
-
-
-                System.out.println("Hay " + menoresDeEdad + " menores de edad.");
-            } else if(a == 4) {
-                int mmmm = 0;
-
-
-
-
-                for (double [] persona : registro) {
-                    if (persona[2] >= 60 && persona[1].equals("casado/a")) {
-                        mmmm++;
-                    } else if(persona[2] >= 65 && persona[1].equals("soltero/a")) {
-                        mmmm++;
-                    }
-                }
-                System.out.println("Hay " + mmmm + " personas de tercera edad");
-            } else if(a == 5) {
-                int c = 0;
-                int d = 0;
-                for(double[] persona : registro) {
-                    if(persona[1].equals("casado/a")) {
-                        c++;
-                    } else if(persona[1].equals("soltero/a")) {
-                        d++;
-                    }
-                }
-
-
-
-
-                System.out.println("Hay " + d + " casados/as.");
-                System.out.println("Hay " + c + " solteros/as.");
-            } else if(a == 6) {
-                System.out.println("Programa finalizado");
+    public static String ingresarEstadoCivil(){
+        String Estadocivil="";
+        while(!Estadocivil.toLowerCase().equals("casado") && !Estadocivil.toLowerCase().equals("casada") && !Estadocivil.toLowerCase().equals("soltero") && !Estadocivil.toLowerCase().equals("soltera")) {
+            try {
+                System.out.println("ingrese el estado civil solo se acepta casado y soltero");
+                Estadocivil = new Scanner(System.in).nextLine();
+            } catch (InputMismatchException e) {
+                System.err.println("Opción inválida");
+                continue;
             }
-        }while (a == 6);
+        }
+        return Estadocivil;
+    }
+    private static int ingresarEdad() {
+        int edad=0;
+        while(true) {
+            try {
+                System.out.println("ingrese la edad");
+                edad = new Scanner(System.in).nextInt();
+            } catch (InputMismatchException e) {
+                System.err.println("Opción inválida");
+                continue;
+            }
+            break;
+        }
+        return edad;
     }
 
-
-
-
-    public static int obtenerUltimoEspacio(double [][] registro) {
-        return registro.length - opa(registro);
+    private static String ingresarNombre() {
+        String nombre="";
+        while(true) {
+            try {
+                System.out.println("ingrese el nombre");
+                nombre = new Scanner(System.in).nextLine();
+            } catch (InputMismatchException e) {
+                System.err.println("Opción inválida");
+                continue;
+            }
+            break;
+        }
+        return  nombre;
     }
-
-
-
-
-    public static boolean hayCupo(double [][] registro) {
-        return opa(registro) != 0;
+    private static int tomarDecision() {
+        Scanner t = new Scanner(System.in);
+        int retorno=0;
+        try {
+            retorno=t.nextInt();
+            if (retorno>6 || retorno<1){
+                System.err.println("dentro del rango, porfavor");
+            }
+        }catch (InputMismatchException e){
+            System.err.println("Solo numeros");
+        }
+        return retorno;
     }
-
-
-
-
-    public static int opa(double [][] registro) {
+    public static int obtenerUltimoEspacio(String [][] registro) {
+        return registro.length - espaciosDisponibles(registro);
+    }
+    public static boolean hayCupo(String [][] registro) {
+        return espaciosDisponibles(registro) != 0;
+    }
+    public static int espaciosDisponibles(String [][] registro) {
         for(int i = 0; i < registro.length; i++) {
-            if(registro[i][0].equals("")){
+            if(registro[i][0]==null){
                 return registro.length - i;
             }
         }
-
-
-
-
         return 0;
     }
 }
