@@ -231,9 +231,9 @@ public class Registro {
         int casados = 0;
         int solteros = 0;
         for(int i = 0; i < registro.length; i++) {
-            if(registro[i][1].equalsIgnoreCase("casado/a")) {
+            if(registro[i][1].equalsIgnoreCase("casada") || registro[i][1].equalsIgnoreCase("casado")) {
                 casados++;
-            } else if(registro[i][1].equalsIgnoreCase("soltero/a")) {
+            } else if(registro[i][1].equalsIgnoreCase("soltera") || registro[i][1].equalsIgnoreCase("soltero")) {
                 solteros++;
             }
         }
