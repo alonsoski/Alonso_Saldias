@@ -160,20 +160,18 @@ public class Registro {
 
     public static int obtenerUltimoEspacio(String [][] registro)
     {
-        return registro.length - opa(registro);
+        return registro.length - espaciosDisponibles(registro);
     }
 
 
 
 
     public static boolean hayCupo(String [][] registro) {
-        return opa(registro) != 0;
+        return espaciosDisponibles(registro) != 0;
     }
 
 
-
-
-    public static int opa(String [][] registro) {
+    public static int espaciosDisponibles(String [][] registro) {
         for(int i = 0; i < registro.length; i++) {
             if(registro[i][0] == null){
                 return registro.length - i;
@@ -186,7 +184,62 @@ public class Registro {
         return 0;
     }
 
-    public static void mayoresEdad(){
+    public static int mayoresEdad(String[][] registro){
+
+        int mayoresDeEdad = 0;
+
+        for (int i = 0; i < registro.length; i++) {
+
+            if (Integer.parseInt(registro[i][2]) >= 18){
+                mayoresDeEdad++;
+            }
+        }
+
+        return mayoresDeEdad;
+    }
+
+    public static int menoresEdad(String[][] registro){
+
+        int menoresDeEdad = 0;
+        int cantidadRegistrados = obtenerUltimoEspacio(registro);
+
+        for (int i = 0; i < cantidadRegistrados; i++) {
+            if (Integer.parseInt(registro[i][2]) < 18) {
+                menoresDeEdad++;
+            }
+        }
+
+        return menoresDeEdad;
+    }
+
+    public static int terceraEdad(String[][] registro){
+
+        int terceraEdad = 0;
+
+        for (int i = 0; i < registro.length; i++) {
+
+            if (Integer.parseInt(registro[i][2]) >= 60){
+                terceraEdad++;
+            }
+        }
+
+        return terceraEdad;
+    }
+
+    public static void estadoCivil(String[][] registro){
+
+        int casados = 0;
+        int solteros = 0;
+        for(int i = 0; i < registro.length; i++) {
+            if(registro[i][1].equalsIgnoreCase("casado/a")) {
+                casados++;
+            } else if(registro[i][1].equalsIgnoreCase("soltero/a")) {
+                solteros++;
+            }
+        }
+
+        System.out.println("Hay " + casados + " casados/as.");
+        System.out.println("Hay " + solteros + " solteros/as.");
 
     }
 }
